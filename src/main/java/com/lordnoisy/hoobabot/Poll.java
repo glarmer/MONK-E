@@ -668,7 +668,7 @@ public class Poll {
                         for (ComponentData messageComponent : component.getData().components().get()) {
                             if (messageComponent.customId().get().startsWith("poll:delete:")) {
                                 customId = messageComponent.customId().get();
-                                label = messageComponent.label().get();
+                                label = messageComponent.label().get().get();
                             }
                         }
                     }
