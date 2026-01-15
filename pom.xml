@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>xyz.glarmer</groupId>
-    <artifactId>monke</artifactId>
+    <artifactId>MONK-E</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -13,5 +13,26 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>6.3.0</version> <!-- replace $version with the latest version -->
+            <!-- Optionally disable audio natives to reduce jar size by excluding `opus-java` and `tink` -->
+            <exclusions>
+                <!-- required for encoding audio into opus, not needed if audio is already provided in opus encoding
+                <exclusion>
+                    <groupId>club.minnced</groupId>
+                    <artifactId>opus-java</artifactId>
+                </exclusion> -->
+                <!-- required for encrypting and decrypting audio
+                <exclusion>
+                    <groupId>com.google.crypto.tink</groupId>
+                    <artifactId>tink</artifactId>
+                </exclusion> -->
+            </exclusions>
+        </dependency>
+    </dependencies>
 
 </project>

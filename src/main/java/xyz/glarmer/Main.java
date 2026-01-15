@@ -1,17 +1,48 @@
 package xyz.glarmer;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import xyz.glarmer.configuration.Configuration;
+
+import java.util.EnumSet;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Configuration config = new Configuration("monke.properties");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        try {
+            EnumSet<GatewayIntent> intents = EnumSet.of(
+                    // Enables MessageReceivedEvent for guild (also known as servers)
+                    GatewayIntent.GUILD_MESSAGES,
+                    // Enables the event for private channels (also known as direct messages)
+                    GatewayIntent.DIRECT_MESSAGES,
+                    // Enables access to message.getContentRaw()
+                    GatewayIntent.MESSAGE_CONTENT,
+                    // Enables MessageReactionAddEvent for guild
+                    GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                    // Enables MessageReactionAddEvent for private channels
+                    GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+
+            JDA jda = JDABuilder.createDefault((String) config.getOption("BOT_TOKEN").getValue(), intents)
+                    .addEventListeners(new MessageReceivedListener())
+                    .setActivity(Activity.watching("for /help"))
+                    .build();
+
+            jda.getRestPing()
+                    .queue(ping ->
+                            // shows ping in milliseconds
+                            System.out.println("Logged in with ping: " + ping));
+
+            // If you want to access the cache, you can use awaitReady() to block the main thread until the jda instance
+            // is fully loaded
+            jda.awaitReady();
+        } catch (InterruptedException e) {
+            // Thrown if the awaitReady() call is interrupted
+            e.printStackTrace();
         }
+
+
     }
 }
